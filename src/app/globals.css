@@ -3,6 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Adobe Fonts from Typekit */
+:root {
+  --font-adelle: adelle, "Times New Roman", serif;
+  --font-adelle-sans: "adelle-sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
 :root {
 
   /* VMH Brand Colors */
@@ -53,8 +59,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-adelle-sans);
+  --font-serif: var(--font-adelle);
 
   /* VMH Brand Color Utilities */
   --color-vmh-gold: var(--vmh-gold);
@@ -334,8 +340,18 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
     overscroll-behavior: none;
   }
+}
+
+/* Adobe Font Utility Classes */
+.font-adelle {
+  font-family: var(--font-adelle);
+}
+
+.font-adelle-sans {
+  font-family: var(--font-adelle-sans);
 }

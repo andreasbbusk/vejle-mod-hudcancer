@@ -165,7 +165,12 @@ const PROJECT_SLUGS_QUERY = groq`
 const NAVIGATION_PROJECTS_QUERY = groq`
   *[_type == "project" && defined(slug.current)] | order(publishedAt desc)[0...8] {
     title,
-    "slug": slug.current
+    "slug": slug.current,
+    description,
+    fundingGoal,
+    amountRaised,
+    status,
+    "image": images[0].asset->url
   }
 `;
 
