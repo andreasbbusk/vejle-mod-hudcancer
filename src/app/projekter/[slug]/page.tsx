@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getProject, getProjectSlugs } from "@/modules/actions/actions";
-import Breadcrumb from "@/modules/components/layout/breadcrumb";
+import Breadcrumb from "@/modules/components/layout/navigation/breadcrumb";
 
 interface PageProps {
   params: {

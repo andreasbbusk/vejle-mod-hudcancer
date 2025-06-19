@@ -60,6 +60,11 @@ export type GalleryCategory = Gallery["category"];
 export interface NavigationProject {
   title: string;
   slug: string;
+  description?: string;
+  fundingGoal?: number;
+  amountRaised?: number;
+  status?: string;
+  image?: string;
 }
 
 export interface NavigationGallery {

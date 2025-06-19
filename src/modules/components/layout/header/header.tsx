@@ -14,6 +14,8 @@ import {
 import { Button } from "@/modules/components/ui/button";
 import { useCurrentPath } from "@/modules/hooks/use-pathname";
 import { cn } from "@/modules/lib/utils";
+import DropdownMenu from "@/modules/components/layout/header/dropdown-menu";
+import { ArrowUpRight } from "lucide-react";
 
 interface HeaderProps {
   className?: string;
@@ -41,6 +43,11 @@ interface DropdownNavItemProps {
 interface ProjectNavItem {
   title: string;
   slug: string;
+  description?: string;
+  fundingGoal?: number;
+  amountRaised?: number;
+  status?: string;
+  image?: string;
 }
 
 interface GalleryNavItem {
@@ -134,7 +141,51 @@ export default function Header({
 }: HeaderProps) {
   const { isActive } = useCurrentPath();
 
+  // Function to determine header background based on current page
+  const getHeaderBackground = () => {
+    if (isActive("/")) return "bg-vmh-light-white"; // Home
+    if (isActive("/events")) return "bg-vmh-light-cream"; // Events
+    if (isActive("/projekter")) return "bg-vmh-light-cream"; // Projects
+    if (isActive("/sponsor")) return "bg-vmh-light-cream"; // Sponsors
+    if (isActive("/hvad-er-hudcancer")) return "bg-vmh-light-cream"; // What is skin cancer
+    if (isActive("/hvem-er-vi") || isActive("/kontakt"))
+      return "bg-vmh-light-cream"; // Who we are
+    if (isActive("/galleri")) return "bg-vmh-light-cream"; // Gallery
+    if (isActive("/donation")) return "bg-vmh-light-cream"; // Donation
+
+    // Default background
+    return "bg-vmh-light-cream";
+  };
+
+  // Enhanced events items with visual grouping
   const eventsItems = [
+    {
+      href: "/events/gallamiddag",
+      title: "Gallamiddag",
+      description:
+        "Årlig gallamiddag med middag, underholdning og støtte til kampen mod hudcancer",
+      isActive: isActive("/events/gallamiddag"),
+    },
+    {
+      href: "/events/auktion",
+      title: "Auktion",
+      description:
+        "Auktion til fordel for kampen mod hudcancer med spændende genstande og oplevelser",
+      isActive: isActive("/events/auktion"),
+      isSubItem: true, // This makes it appear as a sub-item under Gallamiddag
+      addSeparator: true, // Add separator after Auktion to separate from Torveevent
+    },
+    {
+      href: "/events/torveevent",
+      title: "Torveevent",
+      description:
+        "Torveevent med information, aktiviteter og mulighed for at støtte organisationen",
+      isActive: isActive("/events/torveevent"),
+    },
+  ];
+
+  // Simple events items for mobile navigation
+  const simpleEventsItems = [
     {
       href: "/events/gallamiddag",
       label: "Gallamiddag",
@@ -159,10 +210,27 @@ export default function Header({
     isActive: isActive(`/projekter/${project.slug}`),
   }));
 
+  // Generate enhanced project preview items
+  const enhancedProjekterItems = projects.map((project) => ({
+    href: `/projekter/${project.slug}`,
+    title: project.title,
+    description: project.description,
+    image: project.image,
+    isActive: isActive(`/projekter/${project.slug}`),
+  }));
+
   // Generate gallery navigation items from props
   const galleriItems = galleries.map((gallery) => ({
     href: `/galleri/${gallery.slug}`,
     label: gallery.title,
+    isActive: isActive(`/galleri/${gallery.slug}`),
+  }));
+
+  // Generate enhanced gallery preview items
+  const enhancedGalleriItems = galleries.map((gallery) => ({
+    href: `/galleri/${gallery.slug}`,
+    title: gallery.title,
+    description: `${gallery.category} galleri`,
     isActive: isActive(`/galleri/${gallery.slug}`),
   }));
 
@@ -180,9 +248,9 @@ export default function Header({
   const isHvemErViActive = isActive("/hvem-er-vi") || isActive("/kontakt");
 
   return (
-    <header className={cn("bg-vmh-light-cream", className)}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20 lg:h-24">
+    <header className={cn(getHeaderBackground(), className)}>
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto flex justify-between items-center h-20 lg:h-24">
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
@@ -191,7 +259,7 @@ export default function Header({
                 alt="Vejle mod Hudcancer"
                 width={300}
                 height={60}
-                className="h-12 w-auto"
+                className="h-12 w-auto -translate-y-2"
                 priority
               />
             </Link>
@@ -200,43 +268,48 @@ export default function Header({
           {/* Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
             <NavigationMenu viewport={false}>
-              <NavigationMenuList className="flex space-x-6">
-                <DropdownNavItem
+              <NavigationMenuList className="flex space-x-6 font-adelle-sans">
+                <DropdownMenu
                   href="/events"
                   isActive={isEventsActive}
                   items={eventsItems}
+                  viewAllText="Se events"
+                  showIcons={false}
                 >
-                  EVENTS
-                </DropdownNavItem>
-                <DropdownNavItem
+                  Events
+                </DropdownMenu>
+                <DropdownMenu
                   href="/projekter"
                   isActive={isProjekterActive}
-                  items={projekterItems}
+                  items={enhancedProjekterItems}
+                  viewAllText="Se alle projekter"
                 >
-                  PROJEKTER
-                </DropdownNavItem>
+                  Projekter
+                </DropdownMenu>
+                <DropdownMenu
+                  href="/galleri"
+                  isActive={isGalleriActive}
+                  items={enhancedGalleriItems}
+                  viewAllText="Se alle gallerier"
+                  showIcons={false}
+                >
+                  Galleri
+                </DropdownMenu>
                 <NavItem href="/sponsor" isActive={isActive("/sponsor")}>
-                  SPONSOR
+                  Sponsorer
                 </NavItem>
                 <NavItem
                   href="/hvad-er-hudcancer"
                   isActive={isActive("/hvad-er-hudcancer")}
                 >
-                  HVAD ER HUDCANCER
+                  Hudcancer
                 </NavItem>
                 <DropdownNavItem
                   href="/hvem-er-vi"
                   isActive={isHvemErViActive}
                   items={hvemErViItems}
                 >
-                  HVEM ER VI
-                </DropdownNavItem>
-                <DropdownNavItem
-                  href="/galleri"
-                  isActive={isGalleriActive}
-                  items={galleriItems}
-                >
-                  GALLERI
+                  Hvem er vi
                 </DropdownNavItem>
               </NavigationMenuList>
             </NavigationMenu>
@@ -245,8 +318,12 @@ export default function Header({
           {/* Donation CTA */}
           <div className="flex items-center space-x-4">
             <Link href="/donation">
-              <Button variant="primary" size="lg" className="font-bold">
-                Støt nu ↗
+              <Button
+                variant="primary"
+                size="lg"
+                className="font-bold font-adelle-sans"
+              >
+                Støt nu <ArrowUpRight className="w-4 h-4 ml-1" />
               </Button>
             </Link>
 
@@ -290,7 +367,7 @@ export default function Header({
                 EVENTS
               </Link>
               <div className="pl-10 space-y-2">
-                {eventsItems.map((item) => (
+                {simpleEventsItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}

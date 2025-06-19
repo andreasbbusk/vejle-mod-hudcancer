@@ -1,4 +1,4 @@
-import Breadcrumb from "@/modules/components/layout/breadcrumb";
+import Breadcrumb from "@/modules/components/layout/navigation/breadcrumb";
 import { getAllProjects } from "@/modules/actions/actions";
 import Link from "next/link";
 

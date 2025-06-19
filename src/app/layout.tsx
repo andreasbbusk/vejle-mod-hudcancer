@@ -1,21 +1,8 @@
 import type { Metadata } from "next";
-import { Source_Serif_4, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
-import Header from "@/modules/components/layout/header";
-import Footer from "@/modules/components/layout/footer";
+import Header from "@/modules/components/layout/header/header";
+import Footer from "@/modules/components/layout/footer/footer";
 import { getLayoutData } from "@/modules/actions/actions";
-
-const adelleFont = Source_Serif_4({
-  variable: "--font-adelle",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const adelleSansFont = Source_Sans_3({
-  variable: "--font-adelle-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Vejle mod Hudcancer - Sammen bekæmper vi hudcancer",
@@ -65,9 +52,10 @@ export default async function RootLayout({
 
   return (
     <html lang="da">
-      <body
-        className={`${adelleFont.variable} ${adelleSansFont.variable} antialiased min-h-screen bg-vmh-light-cream flex flex-col`}
-      >
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/jpp5tuy.css" />
+      </head>
+      <body className="antialiased min-h-screen bg-vmh-light-cream flex flex-col">
         <Header projects={projects} galleries={galleries} />
         <main className="flex-1">{children}</main>
         <Footer />
