@@ -11,6 +11,7 @@ import {
 } from "@/modules/components/ui/navigation-menu";
 import { Separator } from "@/modules/components/ui/separator";
 import { cn } from "@/modules/lib/utils";
+import { ArrowUpRight } from "lucide-react";
 
 interface DropdownMenuProps {
   href: string;
@@ -21,6 +22,7 @@ interface DropdownMenuProps {
   className?: string;
   showIcons?: boolean;
   align?: "start" | "center" | "end";
+  onHoverChange?: (isOpen: boolean) => void;
 }
 
 interface PreviewItem {
@@ -42,6 +44,7 @@ export default function DropdownMenu({
   className,
   showIcons = true,
   align = "start",
+  onHoverChange,
 }: DropdownMenuProps) {
   const router = useRouter();
 
@@ -49,16 +52,24 @@ export default function DropdownMenu({
     router.push(href);
   };
 
+  const handleMouseEnter = () => {
+    onHoverChange?.(true);
+  };
+
+  const handleMouseLeave = () => {
+    onHoverChange?.(false);
+  };
+
   return (
-    <NavigationMenuItem className={cn("relative", className)}>
-      {/* Active indicator line - vertical */}
-      {isActive && (
-        <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 w-0.5 h-12 bg-vmh-gold rounded-full animate-in slide-in-from-top-4 duration-400 ease-out" />
-      )}
+    <NavigationMenuItem
+      className={cn("relative", className)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <NavigationMenuTrigger
         onClick={handleClick}
         className={cn(
-          "font-medium uppercase tracking-wide text-sm py-2 px-1 relative bg-transparent hover:bg-transparent data-[state=open]:bg-transparent cursor-pointer",
+          "font-medium tracking-wide text-sm py-2 px-1 relative bg-transparent hover:bg-transparent data-[state=open]:bg-transparent cursor-pointer",
           isActive ? "text-vmh-gold" : "text-vmh-dark-gray hover:text-vmh-gold"
         )}
       >
@@ -77,9 +88,9 @@ export default function DropdownMenu({
             <NavigationMenuLink asChild>
               <Link
                 href={href}
-                className="text-sm text-vmh-gold hover:text-vmh-gold/80 font-medium transition-colors"
+                className="text-sm text-vmh-gold hover:text-vmh-gold/80 font-medium transition-colors flex items-center flex-row gap-2"
               >
-                {viewAllText} ↗
+                {viewAllText} <ArrowUpRight className="w-4 h-4 text-vmh-gold" />
               </Link>
             </NavigationMenuLink>
           </div>
@@ -94,7 +105,7 @@ export default function DropdownMenu({
                     <Link
                       href={item.href}
                       className={cn(
-                        "block p-3 rounded-lg transition-all duration-200 group",
+                        "block py-3 px-0 rounded-lg transition-all duration-200 group",
                         item.isActive ? "text-vmh-gold" : ""
                       )}
                     >

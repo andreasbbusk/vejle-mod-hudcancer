@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCurrentPath } from "@/modules/hooks/use-pathname";
 import { cn } from "@/modules/lib/utils";
+import { Button } from "@/modules/components/ui/button";
 
 interface ProjectNavItem {
   title: string;
@@ -24,226 +25,150 @@ interface MobileNavigationProps {
   isOpen?: boolean;
   projects?: ProjectNavItem[];
   galleries?: GalleryNavItem[];
+  onClose?: () => void;
+  headerBackground?: string;
 }
 
 export default function MobileNavigation({
-  isOpen = true,
-  projects = [],
-  galleries = [],
+  isOpen = false,
+  onClose,
+  headerBackground = "bg-vmh-light-white",
 }: MobileNavigationProps) {
   const { isActive } = useCurrentPath();
 
-  // Simple events items for mobile navigation
-  const simpleEventsItems = [
-    {
-      href: "/events/gallamiddag",
-      label: "Gallamiddag",
-      isActive: isActive("/events/gallamiddag"),
-    },
-    {
-      href: "/events/torveevent",
-      label: "Torveevent",
-      isActive: isActive("/events/torveevent"),
-    },
-    {
-      href: "/events/auktion",
-      label: "Auktion",
-      isActive: isActive("/events/auktion"),
-    },
-  ];
-
-  // Generate project navigation items from props
-  const projekterItems = projects.map((project) => ({
-    href: `/projekter/${project.slug}`,
-    label: project.title,
-    isActive: isActive(`/projekter/${project.slug}`),
-  }));
-
-  // Generate gallery navigation items from props
-  const galleriItems = galleries.map((gallery) => ({
-    href: `/galleri/${gallery.slug}`,
-    label: gallery.title,
-    isActive: isActive(`/galleri/${gallery.slug}`),
-  }));
-
-  const hvemErViItems = [
-    {
-      href: "/kontakt",
-      label: "Kontakt",
-      isActive: isActive("/kontakt"),
-    },
-  ];
-
-  const isEventsActive = isActive("/events");
-  const isProjekterActive = isActive("/projekter");
-  const isGalleriActive = isActive("/galleri");
-  const isHvemErViActive = isActive("/hvem-er-vi") || isActive("/kontakt");
+  const handleLinkClick = () => {
+    onClose?.();
+  };
 
   if (!isOpen) return null;
 
   return (
-    <div className="lg:hidden py-4 border-t border-vmh-light-gray">
-      <nav className="flex flex-col space-y-4">
-        {/* Events Section */}
-        <div className="space-y-2">
+    <div
+      className={cn(
+        "block lg:hidden absolute left-0 right-0 top-full z-[60] rounded-b-2xl shadow-lg",
+        headerBackground
+      )}
+    >
+      <div className="px-6 py-6 max-h-[80vh] overflow-y-auto flex flex-col">
+        {/* Header section */}
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-sm text-vmh-dark-gray">
+              Hjælp os med at gøre en forskel...
+            </span>
+            <div className="bg-vmh-gold text-vmh-dark-gray text-xs font-semibold px-2 py-1 rounded-full">
+              5
+            </div>
+          </div>
+        </div>
+
+        {/* Main navigation */}
+        <nav className="space-y-1">
           <Link
             href="/events"
+            onClick={handleLinkClick}
             className={cn(
-              "font-medium uppercase tracking-wide text-sm relative pl-6",
-              isEventsActive ? "text-vmh-gold" : "text-vmh-dark-gray"
+              "block text-2xl font-light leading-relaxed py-2 transition-colors",
+              isActive("/events")
+                ? "text-vmh-gold"
+                : "text-vmh-dark-gray hover:text-vmh-gold"
             )}
           >
-            {isEventsActive && (
-              <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-1 h-4 bg-vmh-gold rounded-full animate-in slide-in-from-left-2 duration-300 ease-out" />
-            )}
-            EVENTS
+            Events
           </Link>
-          <div className="pl-10 space-y-2">
-            {simpleEventsItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "block text-sm font-medium relative pl-4",
-                  item.isActive ? "text-vmh-gold" : "text-vmh-dark-gray"
-                )}
-              >
-                {item.isActive && (
-                  <div className="absolute -left-1 top-1/2 transform -translate-y-1/2 w-0.5 h-3 bg-vmh-gold rounded-full animate-in slide-in-from-left-1 duration-300 ease-out" />
-                )}
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
 
-        {/* Projekter Section */}
-        <div className="space-y-2">
           <Link
             href="/projekter"
+            onClick={handleLinkClick}
             className={cn(
-              "font-medium uppercase tracking-wide text-sm relative pl-6",
-              isProjekterActive ? "text-vmh-gold" : "text-vmh-dark-gray"
+              "block text-2xl font-light leading-relaxed py-2 transition-colors",
+              isActive("/projekter")
+                ? "text-vmh-gold"
+                : "text-vmh-dark-gray hover:text-vmh-gold"
             )}
           >
-            {isProjekterActive && (
-              <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-1 h-4 bg-vmh-gold rounded-full animate-in slide-in-from-left-2 duration-300 ease-out" />
-            )}
-            PROJEKTER
+            Projekter
           </Link>
-          <div className="pl-10 space-y-2">
-            {projekterItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "block text-sm font-medium relative pl-4",
-                  item.isActive ? "text-vmh-gold" : "text-vmh-dark-gray"
-                )}
-              >
-                {item.isActive && (
-                  <div className="absolute -left-1 top-1/2 transform -translate-y-1/2 w-0.5 h-3 bg-vmh-gold rounded-full animate-in slide-in-from-left-1 duration-300 ease-out" />
-                )}
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
 
-        {/* Galleri Section */}
-        <div className="space-y-2">
-          <Link
-            href="/galleri"
-            className={cn(
-              "font-medium uppercase tracking-wide text-sm relative pl-6",
-              isGalleriActive ? "text-vmh-gold" : "text-vmh-dark-gray"
-            )}
-          >
-            {isGalleriActive && (
-              <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-1 h-4 bg-vmh-gold rounded-full animate-in slide-in-from-left-2 duration-300 ease-out" />
-            )}
-            GALLERI
-          </Link>
-          <div className="pl-10 space-y-2">
-            {galleriItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "block text-sm font-medium relative pl-4",
-                  item.isActive ? "text-vmh-gold" : "text-vmh-dark-gray"
-                )}
-              >
-                {item.isActive && (
-                  <div className="absolute -left-1 top-1/2 transform -translate-y-1/2 w-0.5 h-3 bg-vmh-gold rounded-full animate-in slide-in-from-left-1 duration-300 ease-out" />
-                )}
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Other Navigation Items */}
-        <Link
-          href="/sponsor"
-          className={cn(
-            "font-medium uppercase tracking-wide text-sm relative pl-6",
-            isActive("/sponsor") ? "text-vmh-gold" : "text-vmh-dark-gray"
-          )}
-        >
-          {isActive("/sponsor") && (
-            <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-1 h-4 bg-vmh-gold rounded-full animate-in slide-in-from-left-2 duration-300 ease-out" />
-          )}
-          SPONSOR
-        </Link>
-        <Link
-          href="/hvad-er-hudcancer"
-          className={cn(
-            "font-medium uppercase tracking-wide text-sm relative pl-6",
-            isActive("/hvad-er-hudcancer")
-              ? "text-vmh-gold"
-              : "text-vmh-dark-gray"
-          )}
-        >
-          {isActive("/hvad-er-hudcancer") && (
-            <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-1 h-4 bg-vmh-gold rounded-full animate-in slide-in-from-left-2 duration-300 ease-out" />
-          )}
-          HVAD ER HUDCANCER
-        </Link>
-
-        {/* Hvem er vi Section */}
-        <div className="space-y-2">
           <Link
             href="/hvem-er-vi"
+            onClick={handleLinkClick}
             className={cn(
-              "font-medium uppercase tracking-wide text-sm relative pl-6",
-              isHvemErViActive ? "text-vmh-gold" : "text-vmh-dark-gray"
+              "block text-2xl font-light leading-relaxed py-2 transition-colors",
+              isActive("/hvem-er-vi")
+                ? "text-vmh-gold"
+                : "text-vmh-dark-gray hover:text-vmh-gold"
             )}
           >
-            {isHvemErViActive && (
-              <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-1 h-4 bg-vmh-gold rounded-full animate-in slide-in-from-left-2 duration-300 ease-out" />
-            )}
-            HVEM ER VI
+            Hvem er vi
           </Link>
-          <div className="pl-10 space-y-2">
-            {hvemErViItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "block text-sm font-medium relative pl-4",
-                  item.isActive ? "text-vmh-gold" : "text-vmh-dark-gray"
-                )}
+
+          <Link
+            href="/galleri"
+            onClick={handleLinkClick}
+            className={cn(
+              "block text-2xl font-light leading-relaxed py-2 transition-colors",
+              isActive("/galleri")
+                ? "text-vmh-gold"
+                : "text-vmh-dark-gray hover:text-vmh-gold"
+            )}
+          >
+            Galleri
+          </Link>
+
+          <Link
+            href="/hvad-er-hudcancer"
+            onClick={handleLinkClick}
+            className={cn(
+              "block text-2xl font-light leading-relaxed py-2 transition-colors",
+              isActive("/hvad-er-hudcancer")
+                ? "text-vmh-gold"
+                : "text-vmh-dark-gray hover:text-vmh-gold"
+            )}
+          >
+            Hudcancer
+          </Link>
+
+          <Link
+            href="/sponsor"
+            onClick={handleLinkClick}
+            className={cn(
+              "block text-2xl font-light leading-relaxed py-2 transition-colors",
+              isActive("/sponsor")
+                ? "text-vmh-gold"
+                : "text-vmh-dark-gray hover:text-vmh-gold"
+            )}
+          >
+            Sponsor
+          </Link>
+        </nav>
+
+        {/* Donate button at bottom */}
+        <div className="mt-6 pb-4">
+          <Button
+            asChild
+            size="lg"
+            className="w-full bg-vmh-gold hover:bg-vmh-gold/90 text-vmh-dark-gray font-semibold py-4 px-8 rounded-full text-lg transition-all duration-200 hover:scale-[1.02]"
+          >
+            <Link href="/donation" onClick={handleLinkClick}>
+              Doner nu
+              <svg
+                className="ml-2 w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                {item.isActive && (
-                  <div className="absolute -left-1 top-1/2 transform -translate-y-1/2 w-0.5 h-3 bg-vmh-gold rounded-full animate-in slide-in-from-left-1 duration-300 ease-out" />
-                )}
-                {item.label}
-              </Link>
-            ))}
-          </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </Link>
+          </Button>
         </div>
-      </nav>
+      </div>
     </div>
   );
 }
