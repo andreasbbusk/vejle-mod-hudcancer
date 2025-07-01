@@ -25,6 +25,9 @@
 *.pem
 .cursorrules
 
+# sanity
+/src/sanity
+
 # debug
 npm-debug.log*
 yarn-debug.log*
