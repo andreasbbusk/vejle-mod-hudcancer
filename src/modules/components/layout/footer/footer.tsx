@@ -13,13 +13,13 @@ export default function Footer({ className }: FooterProps) {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-12 items-center">
           {/* Logo Section */}
           <div className="">
-              <Image
-                src="/footer-logo.svg"
-                alt="Vejle mod Hudcancer"
-                width={256}
-                height={256}
-                className=""
-              />
+            <Image
+              src="/icons/footer-logo.svg"
+              alt="Vejle mod Hudcancer"
+              width={256}
+              height={256}
+              className=""
+            />
           </div>
 
           {/* Contact Information */}
@@ -28,7 +28,7 @@ export default function Footer({ className }: FooterProps) {
             <div className="flex items-center justify-center space-x-4">
               <div className="w-12 h-8 flex-shrink-0">
                 <Image
-                  src="/mail-icon.svg"
+                  src="/icons/mail.svg"
                   alt="Email"
                   width={47}
                   height={29}
@@ -45,7 +45,7 @@ export default function Footer({ className }: FooterProps) {
             <div className="flex items-center justify-center space-x-4">
               <div className="w-7 h-12 flex-shrink-0">
                 <Image
-                  src="/location.svg"
+                  src="/icons/location.svg"
                   alt="Location"
                   width={26}
                   height={46}
@@ -69,7 +69,7 @@ export default function Footer({ className }: FooterProps) {
                 aria-label="Facebook"
               >
                 <Image
-                  src="/facebook.svg"
+                  src="/icons/facebook.svg"
                   alt="Facebook"
                   width={28}
                   height={28}
@@ -84,7 +84,7 @@ export default function Footer({ className }: FooterProps) {
                 aria-label="Instagram"
               >
                 <Image
-                  src="/instagram.svg"
+                  src="/icons/instagram.svg"
                   alt="Instagram"
                   width={28}
                   height={28}
@@ -99,7 +99,7 @@ export default function Footer({ className }: FooterProps) {
                 aria-label="LinkedIn"
               >
                 <Image
-                  src="/linkedin.svg"
+                  src="/icons/linkedin.svg"
                   alt="LinkedIn"
                   width={28}
                   height={28}

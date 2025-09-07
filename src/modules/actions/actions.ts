@@ -5,6 +5,7 @@ import type {
   Gallery,
   NavigationProject,
   NavigationGallery,
+  ProjectLanding,
 } from "@/modules/types/sanity";
 
 // Gallery Queries
@@ -182,6 +183,76 @@ const NAVIGATION_GALLERIES_QUERY = groq`
   }
 `;
 
+// Project Landing Queries
+const PROJECT_LANDING_QUERY = groq`
+  *[_type == "projectLanding" && slug.current == $slug][0] {
+    _id,
+    _type,
+    title,
+    slug,
+    totalAmountRaised,
+    charts[] {
+      amount,
+      overskrift,
+      beskrivelse,
+      year
+    },
+    projectHighlights[] {
+      projectYear,
+      titel,
+      beskrivelse,
+      slug
+    },
+    publishedAt
+  }
+`;
+
+const ALL_PROJECT_LANDINGS_QUERY = groq`
+  *[_type == "projectLanding"] | order(publishedAt desc) {
+    _id,
+    _type,
+    title,
+    slug,
+    totalAmountRaised,
+    charts[] {
+      amount,
+      overskrift,
+      beskrivelse,
+      year
+    },
+    projectHighlights[] {
+      projectYear,
+      titel,
+      beskrivelse,
+      slug
+    },
+    publishedAt
+  }
+`;
+
+const MAIN_PROJECT_LANDING_QUERY = groq`
+  *[_type == "projectLanding" && slug.current == "projekter"][0] {
+    _id,
+    _type,
+    title,
+    slug,
+    totalAmountRaised,
+    charts[] {
+      amount,
+      overskrift,
+      beskrivelse,
+      year
+    },
+    projectHighlights[] {
+      projectYear,
+      titel,
+      beskrivelse,
+      slug
+    },
+    publishedAt
+  }
+`;
+
 // Gallery Actions
 export async function getGallery(slug: string): Promise<Gallery | null> {
   try {
@@ -322,5 +393,50 @@ export async function getLayoutData(): Promise<LayoutData> {
       projects: [],
       galleries: [],
     };
+  }
+}
+
+// Project Landing Actions
+export async function getProjectLanding(
+  slug: string
+): Promise<ProjectLanding | null> {
+  try {
+    const projectLanding = await client.fetch(PROJECT_LANDING_QUERY, { slug });
+    return projectLanding || null;
+  } catch (error) {
+    console.error("Error fetching project landing:", error);
+    return null;
+  }
+}
+
+export async function getAllProjectLandings(): Promise<ProjectLanding[]> {
+  try {
+    const projectLandings = await client.fetch(ALL_PROJECT_LANDINGS_QUERY);
+    return projectLandings || [];
+  } catch (error) {
+    console.error("Error fetching project landings:", error);
+    return [];
+  }
+}
+
+export async function getMainProjectLanding(): Promise<ProjectLanding | null> {
+  try {
+    const projectLanding = await client.fetch(
+      MAIN_PROJECT_LANDING_QUERY,
+      {},
+      {
+        next: { revalidate: 60 }, // Revalidate every minute
+      }
+    );
+
+    if (!projectLanding) {
+      console.warn("No project landing found with slug 'projekter'");
+      return null;
+    }
+
+    return projectLanding;
+  } catch (error) {
+    console.error("Error fetching main project landing:", error);
+    return null;
   }
 }

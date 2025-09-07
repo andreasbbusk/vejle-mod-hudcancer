@@ -72,3 +72,33 @@ export interface NavigationGallery {
   slug: string;
   category: GalleryCategory;
 }
+
+// Project Landing Page Types
+export type ProjectLandingChart = {
+  amount: number;
+  overskrift: string;
+  beskrivelse: string;
+  year: string;
+};
+
+export type ProjectHighlight = {
+  projectYear: string;
+  titel: string;
+  beskrivelse: string;
+  slug: {
+    current: string;
+  };
+};
+
+export type ProjectLanding = {
+  _id: string;
+  _type: "projectLanding";
+  title: string;
+  slug: {
+    current: string;
+  };
+  totalAmountRaised: number;
+  charts: ProjectLandingChart[];
+  projectHighlights: ProjectHighlight[];
+  publishedAt: string;
+};

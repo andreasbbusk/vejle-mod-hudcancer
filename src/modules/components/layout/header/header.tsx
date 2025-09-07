@@ -55,9 +55,9 @@ function NavItem({ href, children, isActive }: NavItemProps) {
   return (
     <NavigationMenuItem className="relative">
       {/* Active indicator line - vertical */}
-      {isActive && (
+      {/* {isActive && (
         <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 w-0.5 h-12 bg-vmh-gold rounded-full animate-in slide-in-from-top-4 duration-400 ease-out" />
-      )}
+      )} */}
       <NavigationMenuLink asChild>
         <Link
           href={href}
@@ -83,7 +83,7 @@ function BlurOverlay({ isVisible }: { isVisible: boolean }) {
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       style={{
-        background: "rgba(255, 255, 255, 0.02)", // Very subtle white overlay
+        background: "rgba(255, 255, 255, 0.01)", // Very subtle white overlay
         transitionProperty: "opacity, backdrop-filter",
         transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
       }}
@@ -305,7 +305,7 @@ export default function Header({
           className
         )}
       >
-        <div ref={containerRef} className="px-4 sm:px-6 lg:px-12">
+        <div ref={containerRef} className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div
             ref={innerRef}
             className="flex justify-between items-center h-16 lg:h-20"
@@ -404,7 +404,7 @@ export default function Header({
               onMouseLeave={handleDonationLeave}
               className="hidden lg:block transform-gpu"
             >
-              <Link href="/donation">
+              <Link href="https://vejlemodhudcancer.nemtilmeld.dk/7/" target="_blank">
                 <Button
                   variant="primary"
                   size="md"
